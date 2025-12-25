@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Navidad</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a3d 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Efecto de nieve */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: white;
+            font-size: 1em;
+            opacity: 0.8;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            color: #ffd700;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            margin-bottom: 50px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5), 0 0 20px #ffd700;
+            }
+            to {
+                text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5), 0 0 40px #ffd700, 0 0 60px #ffd700;
+            }
+        }
+
+        .instruction {
+            font-size: 1.3em;
+            color: #fff;
+            margin-bottom: 30px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        .envelope-wrapper.opened {
+            cursor: default;
+        }
+
+        .envelope-wrapper:not(.opened):hover {
+            transform: scale(1.05);
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+        }
+
+        .envelope-bottom {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 120px solid #c41e3a;
+            top: 80px;
+            z-index: 3;
+        }
+
+        .envelope-top {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 120px solid #d32f2f;
+            top: 80px;
+            z-index: 5;
+            transform-origin: top center;
+            transition: transform 0.8s ease;
+        }
+
+        .envelope.open .envelope-top {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-back {
+            position: absolute;
+            width: 300px;
+            height: 160px;
+            background: #e74c3c;
+            top: 40px;
+            z-index: 1;
+        }
+
+        .letter {
+            position: fixed;
+            width: 90vw;
+            max-width: 650px;
+            height: auto;
+            max-height: 85vh;
+            background: linear-gradient(to bottom, #fffef0 0%, #fdf8e8 100%);
+            border: 4px solid #d4af37;
+            border-radius: 15px;
+            padding: 40px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.8s ease;
+            overflow-y: auto;
+        }
+
+        .envelope.open .letter {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .letter-content {
+            font-size: clamp(1rem, 2.5vw, 1.3em);
+            color: #2c2c2c;
+            line-height: 1.9;
+            text-align: justify;
+            font-family: 'Courier New', monospace;
+        }
+
+        .letter-content p {
+            margin-bottom: 20px;
+            text-indent: 30px;
+        }
+
+        .letter-content p:first-child {
+            text-indent: 0;
+            font-weight: bold;
+            color: #c41e3a;
+            font-size: 1.1em;
+        }
+
+        .signature {
+            margin-top: 30px;
+            text-align: right;
+            font-style: italic;
+            color: #1e3a5f;
+            font-weight: bold;
+            font-size: 1.05em;
+            text-indent: 0;
+        }
+
+        .decoration {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            font-size: 2em;
+        }
+
+        .star1 { top: 10%; left: 10%; animation: twinkle 2s ease-in-out infinite; }
+        .star2 { top: 15%; right: 15%; animation: twinkle 2.5s ease-in-out infinite; }
+        .star3 { bottom: 20%; left: 5%; animation: twinkle 3s ease-in-out infinite; }
+        .star4 { bottom: 15%; right: 10%; animation: twinkle 2.2s ease-in-out infinite; }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+                margin-bottom: 30px;
+            }
+
+            .instruction {
+                font-size: 1.1em;
+            }
+
+            .envelope-wrapper {
+                width: 250px;
+                height: 170px;
+            }
+
+            .envelope {
+                width: 250px;
+                height: 170px;
+            }
+
+            .envelope-bottom {
+                border-left: 125px solid transparent;
+                border-right: 125px solid transparent;
+                border-bottom: 100px solid #c41e3a;
+                top: 70px;
+            }
+
+            .envelope-top {
+                border-left: 125px solid transparent;
+                border-right: 125px solid transparent;
+                border-top: 100px solid #d32f2f;
+                top: 70px;
+            }
+
+            .letter {
+                width: 95vw;
+                padding: 25px 20px;
+                max-height: 90vh;
+            }
+
+            .letter-content {
+                font-size: clamp(0.9rem, 3.5vw, 1.1em);
+            }
+
+            .letter-content p {
+                text-indent: 20px;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration star1">⭐</div>
+    <div class="decoration star2">✨</div>
+    <div class="decoration star3">🎄</div>
+    <div class="decoration star4">🎁</div>
+
+    <div class="container">
+        <h1>¡Feliz Fiesta! 🎄</h1>
+        <p class="instruction" id="instruction">👆 Dar clic a la carta</p>
+        
+        <div class="envelope-wrapper" id="envelopeWrapper">
+            <div class="envelope" id="envelope">
+                <div class="envelope-back"></div>
+                <div class="envelope-bottom"></div>
+                <div class="letter">
+                    <div class="letter-content">
+                        <p><strong>Queridos amigos:</strong></p>
+                        <p>En esta hermosa noche quiero desearles una feliz Nochebuena, una muy feliz Navidad y un próspero Año Nuevo. Que la paz, el amor y la alegría llenen sus hogares, y que cada uno de sus sueños se haga realidad.</p>
+                        <p>Gracias por su amistad y por los momentos compartidos. Que Santa Claus les traiga mucha felicidad y bendiciones. 🎄✨</p>
+                        <p class="signature">Atentamente, su querido amigo Josué.</p>
+                    </div>
+                </div>
+                <div class="envelope-top"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Efecto de nieve
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.animationDuration = Math.random() * 3 + 5 + 's';
+            snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+            snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+            document.body.appendChild(snowflake);
+
+            setTimeout(() => {
+                snowflake.remove();
+            }, 8000);
+        }
+
+        setInterval(createSnowflake, 300);
+
+        // Abrir sobre
+        const envelopeWrapper = document.getElementById('envelopeWrapper');
+        const envelope = document.getElementById('envelope');
+        const instruction = document.getElementById('instruction');
+        let isOpen = false;
+
+        envelopeWrapper.addEventListener('click', function() {
+            if (!isOpen) {
+                envelope.classList.add('open');
+                instruction.style.display = 'none';
+                envelopeWrapper.style.cursor = 'default';
+                isOpen = true;
+            }
+        });
+    </script>
+</body>
+</html>
